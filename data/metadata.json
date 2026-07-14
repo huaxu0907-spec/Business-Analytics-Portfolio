@@ -1,0 +1,9 @@
+{
+  "rows": 102738,
+  "orders": 89860,
+  "sellers": 2793,
+  "start_date": "2017-01-05",
+  "end_date": "2018-07-31",
+  "gmv_definition": "delivered order item price sum, excluding freight",
+  "currency": "BRL"
+}

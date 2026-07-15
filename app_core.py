@@ -409,8 +409,9 @@ def render_weekly_report(fact: pd.DataFrame, metadata: dict) -> None:
 
     try:
         docx_bytes = create_weekly_report_docx(report, report_title.strip() or "电商经营周报")
-    except Exception:
+    except Exception as e:
         st.error("Word周报生成失败。请保持当前筛选条件并重新尝试；页面预览结果不受影响。", icon=":material/error:")
+        st.exception(e)
         return
     filename = f"经营周报_{start_date}_{end_date}.docx"
     st.download_button(
@@ -622,89 +623,92 @@ def render_diagnosis(
     )
 
 
-fact, metadata = get_data()
-st.session_state.setdefault("bi_view", "经营总览")
-st.session_state.setdefault("diag_seller", DEFAULT_SELLER)
-st.session_state.setdefault("diag_selector", DEFAULT_SELLER)
-st.session_state.setdefault("portfolio_navigation", "首页")
+def render_dashboard(fact: pd.DataFrame, metadata: dict) -> None:
+    module_header("经营分析 Dashboard", "从经营总览识别关注指标，再进入商家诊断形成优先核查方向、行动建议和验证指标。", ":material/monitoring:", "程序1｜经营监控", "blue")
 
-if "requested_navigation" in st.session_state:
-    st.session_state["portfolio_navigation"] = st.session_state.pop("requested_navigation")
+    minimum_date = pd.Timestamp(metadata["start_date"]).date()
+    maximum_date = pd.Timestamp(metadata["end_date"]).date()
+    st.sidebar.subheader("分析范围")
+    selected_dates = st.sidebar.date_input(
+        "分析日期",
+        value=(pd.Timestamp(DEFAULT_START).date(), pd.Timestamp(DEFAULT_END).date()),
+        min_value=minimum_date,
+        max_value=maximum_date,
+    )
+    if not isinstance(selected_dates, (tuple, list)) or len(selected_dates) != 2:
+        st.warning("请选择完整的开始日期和结束日期。", icon=":material/warning:")
+        return
+    start_date, end_date = selected_dates
+    if start_date > end_date:
+        st.warning("开始日期不能晚于结束日期。", icon=":material/warning:")
+        return
 
-app_mode = os.getenv("STREAMLIT_APP_MODE")
-navigation_options = ["首页", "经营分析 Dashboard", "商家异常诊断", "自动经营周报", "分析思路", "项目说明", "关于作者"]
-navigation = app_mode or st.sidebar.radio(
-    "作品集导航",
-    navigation_options,
-    key="portfolio_navigation",
-)
-st.sidebar.caption("独立部署模式" if app_mode else "统一作品集入口")
+    st.sidebar.subheader("分析对象")
+    categories = [ALL_CATEGORIES] + sorted(fact["category"].dropna().unique().tolist())
+    category = st.sidebar.selectbox("品类", categories, index=0)
+    top_sellers = contribution(fact, "seller_id", limit=200)["seller_id"].tolist()
+    if DEFAULT_SELLER not in top_sellers:
+        top_sellers.insert(0, DEFAULT_SELLER)
+    seller_options = [ALL_SELLERS] + top_sellers
+    seller_scope = st.sidebar.selectbox(
+        "商家范围",
+        seller_options,
+        format_func=lambda value: value if value == ALL_SELLERS else seller_label(value),
+    )
+    st.sidebar.caption("商家列表保留GMV贡献前200名，并固定包含默认案例商家。")
 
-if navigation == "首页":
-    render_home(metadata)
-    st.stop()
+    show_scope(start_date, end_date, category, seller_scope)
+    view = st.segmented_control(
+        "业务视图",
+        ["经营总览", "商家诊断"],
+        key="bi_view",
+        width="content",
+    )
+    if view == "经营总览":
+        render_overview(fact, start_date, end_date, category, seller_scope)
+    else:
+        render_diagnosis(fact, start_date, end_date, category, seller_scope)
 
-if navigation == "商家异常诊断":
-    render_anomaly_detection(fact, metadata)
-    st.stop()
 
-if navigation == "自动经营周报":
-    render_weekly_report(fact, metadata)
-    st.stop()
+def main() -> None:
+    fact, metadata = get_data()
+    st.session_state.setdefault("bi_view", "经营总览")
+    st.session_state.setdefault("diag_seller", DEFAULT_SELLER)
+    st.session_state.setdefault("diag_selector", DEFAULT_SELLER)
+    st.session_state.setdefault("portfolio_navigation", "首页")
 
-if navigation == "分析思路":
-    render_analysis_approach()
-    st.stop()
+    if "requested_navigation" in st.session_state:
+        st.session_state["portfolio_navigation"] = st.session_state.pop("requested_navigation")
 
-if navigation == "项目说明":
-    render_project_notes()
-    st.stop()
+    navigation_options = ["首页", "经营分析 Dashboard", "商家异常诊断", "自动经营周报", "分析思路", "项目说明", "关于作者"]
+    app_mode = os.getenv("STREAMLIT_APP_MODE")
+    navigation = app_mode if app_mode in navigation_options else None
+    if navigation is None:
+        navigation = st.sidebar.radio(
+            "作品集导航",
+            navigation_options,
+            key="portfolio_navigation",
+        )
+    st.sidebar.caption("独立部署模式" if app_mode in navigation_options else "统一作品集入口")
 
-if navigation == "关于作者":
-    render_about()
-    st.stop()
+    if navigation == "首页":
+        render_home(metadata)
+    elif navigation == "经营分析 Dashboard":
+        render_dashboard(fact, metadata)
+    elif navigation == "商家异常诊断":
+        render_anomaly_detection(fact, metadata)
+    elif navigation == "自动经营周报":
+        render_weekly_report(fact, metadata)
+    elif navigation == "分析思路":
+        render_analysis_approach()
+    elif navigation == "项目说明":
+        render_project_notes()
+    elif navigation == "关于作者":
+        render_about()
+    else:
+        st.warning("当前导航状态无法识别，已回到作品集首页。", icon=":material/warning:")
+        render_home(metadata)
 
-module_header("经营分析 Dashboard", "从经营总览识别关注指标，再进入商家诊断形成优先核查方向、行动建议和验证指标。", ":material/monitoring:", "程序1｜经营监控", "blue")
 
-minimum_date = pd.Timestamp(metadata["start_date"]).date()
-maximum_date = pd.Timestamp(metadata["end_date"]).date()
-st.sidebar.subheader("分析范围")
-selected_dates = st.sidebar.date_input(
-    "分析日期",
-    value=(pd.Timestamp(DEFAULT_START).date(), pd.Timestamp(DEFAULT_END).date()),
-    min_value=minimum_date,
-    max_value=maximum_date,
-)
-if not isinstance(selected_dates, (tuple, list)) or len(selected_dates) != 2:
-    st.warning("请选择完整的开始日期和结束日期。", icon=":material/warning:")
-    st.stop()
-start_date, end_date = selected_dates
-if start_date > end_date:
-    st.warning("开始日期不能晚于结束日期。", icon=":material/warning:")
-    st.stop()
-
-st.sidebar.subheader("分析对象")
-categories = [ALL_CATEGORIES] + sorted(fact["category"].dropna().unique().tolist())
-category = st.sidebar.selectbox("品类", categories, index=0)
-top_sellers = contribution(fact, "seller_id", limit=200)["seller_id"].tolist()
-if DEFAULT_SELLER not in top_sellers:
-    top_sellers.insert(0, DEFAULT_SELLER)
-seller_options = [ALL_SELLERS] + top_sellers
-seller_scope = st.sidebar.selectbox(
-    "商家范围",
-    seller_options,
-    format_func=lambda value: value if value == ALL_SELLERS else seller_label(value),
-)
-st.sidebar.caption("商家列表保留GMV贡献前200名，并固定包含默认案例商家。")
-
-show_scope(start_date, end_date, category, seller_scope)
-view = st.segmented_control(
-    "业务视图",
-    ["经营总览", "商家诊断"],
-    key="bi_view",
-    width="content",
-)
-if view == "经营总览":
-    render_overview(fact, start_date, end_date, category, seller_scope)
-else:
-    render_diagnosis(fact, start_date, end_date, category, seller_scope)
+if __name__ == "__main__":
+    main()

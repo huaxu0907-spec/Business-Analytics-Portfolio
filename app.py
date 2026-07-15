@@ -1,6 +1,4 @@
-import streamlit as st
+import app_core
 
 
-st.set_page_config(page_title="Deployment Test")
-st.title("Deployment Success")
-st.success("Streamlit is running correctly.")
+app_core.main()

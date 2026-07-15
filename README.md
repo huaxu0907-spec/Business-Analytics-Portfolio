@@ -1,163 +1,206 @@
-# 商业分析作品集（Business Analytics Portfolio）
+# Business Analytics Portfolio
 
-这是一个围绕重点商家经营异常诊断、经营分析、SQL、Python、Dashboard 与自动经营周报构建的完整商业分析作品集。它展示的是从业务问题到分析交付的完整流程，而不只是代码实现。
+This portfolio presents an end-to-end business analytics case built around merchant performance diagnosis, GMV decline analysis, SQL/Python analysis, interactive dashboards, anomaly detection, and automated weekly reporting.
 
-## 项目背景
+The focus is not only the code. It is a complete business analysis workflow: defining the business problem, designing KPI logic, extracting data, identifying signals, generating insights, and turning the analysis into decision-support deliverables.
 
-在电商经营场景中，重点商家 GMV 持续下滑时，业务需要先判断这是否属于平台或品类的共同趋势，再进一步定位商家自身的经营变化。仅看 GMV 无法说明问题，需要结合订单量、客单价、商品与 SKU 结构等指标进行拆解。
+## Project Overview
 
-本项目基于公开匿名电商数据，围绕重点商家经营异常开展分析：通过统一 KPI 口径、SQL 数据提取与 Python 分析，形成 Dashboard、异常诊断和经营周报等交付物，为后续经营核查与决策支持提供分析依据。
+In an e-commerce operating scenario, a key merchant may show a continuous decline in GMV. Before making business recommendations, the first question is whether the decline is caused by platform-wide movement, category-level fluctuation, or merchant-specific operational issues.
 
-## 核心业务问题
+This project uses public anonymized e-commerce transaction data to build a reusable analysis framework. It decomposes GMV into orders, AOV, seller contribution, category structure, SKU movement, and observable risk signals. The final outputs include three Streamlit modules, business analysis deliverables, Executive Summary documents, and resume materials.
 
-- GMV 是否存在异常下降？
-- 变化是否属于平台整体或主营品类趋势？
-- 订单量、客单价、商品结构等指标中，哪些影响更明显？
-- 哪些高贡献 SKU 或经营信号需要重点核查？
-- 如何建立持续监控、异常预警与复盘机制？
+## Core Business Questions
 
-## 商业分析流程
+- Is the merchant's GMV decline abnormal?
+- Is the change driven by the platform/category trend or by merchant-specific issues?
+- Which indicators contribute most to the business decline: orders, AOV, seller mix, category mix, or SKU structure?
+- Which merchants or SKUs should be prioritized for follow-up investigation?
+- How can the analysis be converted into ongoing monitoring and weekly reporting?
 
-业务理解
+## Live Portfolio Demo
 
-↓
+[Open Streamlit Portfolio](https://huaxu0907-spec-business-analytics-portfolio-app-9hxbax.streamlit.app)
 
-KPI 指标设计
+The online app includes the full portfolio entrance and the three interactive modules below.
 
-↓
+## Core Projects
 
-SQL 数据提取
+### 1. Business Analytics Dashboard
 
-↓
+![Dashboard Screenshot](assets/screenshots/dashboard.png)
 
-Python 数据分析
+**Business Background**  
+Business teams need a fast way to monitor GMV, order volume, AOV, active merchants, seller contribution, category contribution, and merchant-level performance changes.
 
-↓
+**Problem**  
+GMV alone cannot explain what happened. The dashboard needs to help users move from high-level performance monitoring to merchant diagnosis without losing the business context.
 
-异常诊断
+**Analysis Method**  
+The dashboard applies KPI decomposition, period-over-period comparison, seller/category contribution analysis, and merchant change ranking. Users can filter by date range, category, and seller scope.
 
-↓
+**Key Findings**  
+The dashboard helps identify whether GMV movement is mainly associated with order volume, AOV, seller concentration, or category structure. It also surfaces merchants that require deeper diagnosis.
 
-业务洞察
+**Business Recommendation**  
+Use the dashboard as the first layer of business monitoring. When negative changes are detected, move selected merchants into the diagnosis module for evidence-based follow-up.
 
-↓
+**Tech Stack**  
+SQL, Python, Pandas, Streamlit, Plotly
 
-经营建议
+**Demo Link**  
+[View Dashboard App](https://huaxu0907-spec-business-analytics-portfolio-app-9hxbax.streamlit.app)
 
-↓
+### 2. Business Anomaly Detection
 
-验证方案
+![Anomaly Detection Screenshot](assets/screenshots/anomaly_detection.png)
 
-## 项目成果
+**Business Background**  
+When multiple merchants operate on the same platform, business teams need a structured way to identify abnormal performance changes and prioritize follow-up actions.
 
-- **经营分析 Dashboard**：集中查看 GMV、订单量、客单价、活跃商家、趋势、贡献结构与商家诊断结果。
-- **商家异常诊断**：基于经营和体验信号识别异常对象，输出处理等级、可观测证据与优先核查方向。
-- **自动经营周报**：将当前筛选范围内的经营结果整理为管理层摘要、风险信号和建议动作，并支持 Word 下载。
-- **Executive Summary**：用于展示项目背景、分析框架、关键发现、建议与技术栈的面试材料。
-- **Resume**：提供面向商业分析与产品分析岗位的两份求职版本。
+**Problem**  
+Manual review is inefficient and inconsistent. The key challenge is to convert observable business signals into a prioritized anomaly list.
 
-## 在线体验
+**Analysis Method**  
+The module compares active months and uses GMV decline, order decline, late delivery rate, and low review rate as observable signals. It generates severity levels, priority labels, evidence fields, investigation directions, and recommended actions.
 
-### 经营分析 Dashboard
+**Key Findings**  
+The analysis identifies abnormal merchant events and separates high-priority cases from lower-priority monitoring cases. The result is not treated as confirmed root cause, but as a structured investigation queue.
 
-围绕经营规模、趋势变化、商家贡献和重点商家诊断，支持按时间、品类与商家范围查看分析结果。
+**Business Recommendation**  
+Use the anomaly list to prioritize P0/P1/P2 follow-up. High-severity merchants should be reviewed first, especially when GMV/order decline is accompanied by observable experience signals.
 
-【在线体验】
+**Tech Stack**  
+SQL, Python, Pandas, Streamlit, Business Rules
 
-Streamlit 链接待补充
+**Demo Link**  
+[View Anomaly Detection App](https://huaxu0907-spec-business-analytics-portfolio-app-9hxbax.streamlit.app)
 
-### 商家异常诊断
+### 3. Automated Weekly Business Report
 
-根据 GMV、订单量、延迟率和低评分率等可观测信号生成异常清单，并提供核查方向与建议动作。
+![Weekly Report Screenshot](assets/screenshots/weekly_report.png)
 
-【在线体验】
+**Business Background**  
+Business teams often need recurring weekly updates for management review, including performance changes, risk signals, and next-step actions.
 
-Streamlit 链接待补充
+**Problem**  
+Manual weekly reporting is repetitive and may create inconsistent KPI definitions. The report process should reuse the same analysis logic as the dashboard.
 
-### 自动经营周报
+**Analysis Method**  
+The module calculates weekly KPIs, compares them with the previous equivalent period, summarizes key changes, extracts risk signals, and generates a downloadable Word report.
 
-将选定周期和范围内的指标、风险信号与建议动作整理为页面预览和可下载的 Word 周报。
+**Key Findings**  
+The weekly report converts dashboard-level analysis into a management-facing summary. It keeps KPI definitions consistent across page preview and Word output.
 
-【在线体验】
+**Business Recommendation**  
+Use the report generator for regular business review. The output should be combined with real operational data such as inventory, traffic, exposure, promotion, and supply-chain records for further validation.
 
-Streamlit 链接待补充
+**Tech Stack**  
+Python, Pandas, Streamlit, python-docx, Business Reporting
 
-## 项目交付物
+**Demo Link**  
+[View Weekly Report App](https://huaxu0907-spec-business-analytics-portfolio-app-9hxbax.streamlit.app)
 
-| 交付物 | 用途 | 文件 / 入口 |
+## Analysis Framework
+
+```text
+Business Understanding
+        |
+        v
+KPI Design
+        |
+        v
+SQL Data Extraction
+        |
+        v
+Python Data Analysis
+        |
+        v
+Anomaly Diagnosis
+        |
+        v
+Business Insight
+        |
+        v
+Business Recommendation
+        |
+        v
+Validation and Monitoring
+```
+
+## Deliverables
+
+| Deliverable | Purpose | Link |
 | --- | --- | --- |
-| Executive Summary | 项目背景、分析框架、关键发现与建议概览 | [Business Executive](executive/Executive_Business_Final.docx) / [Product Executive](executive/Executive_Product_Final.docx) |
-| Business Analysis Report | 完整商业分析报告 | [Business Analysis Report](analysis/deliverables/Business_Analysis_Report.pdf) |
-| Business Project Brief | 项目背景与分析任务说明 | [Business Project Brief](analysis/deliverables/Business_Project_Brief.docx) |
-| SQL Scripts | 数据提取与分析逻辑 | [merchant_anomaly_analysis.sql](analysis/merchant_anomaly_analysis.sql) |
-| Notebook | Python 分析过程与图表输出 | [merchant_anomaly_analysis.ipynb](analysis/merchant_anomaly_analysis.ipynb) |
-| Dashboard | 经营分析与商家诊断 | [dashboard/app.py](dashboard/app.py) |
-| 异常诊断 | 商家异常识别与优先级清单 | [anomaly_detection/app.py](anomaly_detection/app.py) |
-| 经营周报 | 周报预览与 Word 生成 | [weekly_report/app.py](weekly_report/app.py) |
-| Business Resume | 商业分析 / 经营分析 / 数据分析投递版本 | [Resume_Business_Final.docx](resume/Resume_Business_Final.docx) |
-| Product Resume | 产品分析 / AI 产品 / 数据产品投递版本 | [Resume_Product_Final.docx](resume/Resume_Product_Final.docx) |
+| Business Analysis Report | Full business analysis report | [Business_Analysis_Report.pdf](analysis/deliverables/Business_Analysis_Report.pdf) |
+| Business Project Brief | Project background and analysis scope | [Business_Project_Brief.docx](analysis/deliverables/Business_Project_Brief.docx) |
+| SQL Scripts | Data extraction and analysis logic | [merchant_anomaly_analysis.sql](analysis/merchant_anomaly_analysis.sql) |
+| Python Notebook | Analysis process and outputs | [merchant_anomaly_analysis.ipynb](analysis/merchant_anomaly_analysis.ipynb) |
+| Dashboard App | Business monitoring and merchant diagnosis | [dashboard/app.py](dashboard/app.py) |
+| Anomaly Detection App | Merchant anomaly identification | [anomaly_detection/app.py](anomaly_detection/app.py) |
+| Weekly Report App | Weekly business reporting | [weekly_report/app.py](weekly_report/app.py) |
+| Executive Summary | Interview-ready project summary | [Executive_Business_Final.docx](executive/Executive_Business_Final.docx) |
+| Business Resume | Resume for Business/Data Analytics roles | [Resume_Business_Final.docx](resume/Resume_Business_Final.docx) |
+| Product Resume | Resume for Product/AI Product Analytics roles | [Resume_Product_Final.docx](resume/Resume_Product_Final.docx) |
 
-## 项目结构
+## Resume
+
+This repository also includes two role-oriented resume versions:
+
+- [Business Resume](resume/Resume_Business_Final.docx): Business Analytics, Operations Analytics, Data Analytics, BI
+- [Product Resume](resume/Resume_Product_Final.docx): Product Analytics, AI Product, Data Product
+
+## Portfolio Structure
 
 ```text
 Business-Analytics-Portfolio/
-├── dashboard/                 # 经营分析 Dashboard 独立入口
-├── anomaly_detection/         # 商家异常诊断独立入口
-├── weekly_report/             # 自动经营周报独立入口
-├── executive/                 # Executive Summary 面试材料
-├── resume/                    # 商业分析与产品分析简历
-├── assets/screenshots/        # Dashboard、异常诊断、周报预览图片
-├── analysis/                  # SQL、Notebook、分析结果与项目交付物
-├── data/                      # 应用运行所需的公开匿名数据结果
-├── shared/                    # 指标、图表、异常诊断与周报共用逻辑
-├── scripts/                   # 数据准备脚本
-├── app_core.py                # 三个 Streamlit 模块共用应用逻辑
-├── requirements.txt           # Python 依赖
-└── .gitignore                 # Git 忽略规则
+|-- app.py                    # Unified Streamlit portfolio entrance
+|-- app_core.py               # Shared page rendering logic
+|-- dashboard/                # Business Analytics Dashboard
+|-- anomaly_detection/        # Merchant Anomaly Detection
+|-- weekly_report/            # Automated Weekly Business Report
+|-- analysis/                 # SQL, Notebook, figures, and analysis deliverables
+|-- executive/                # Executive Summary documents
+|-- resume/                   # Resume documents
+|-- assets/screenshots/       # Project screenshots
+|-- data/                     # Prepared public anonymized data
+|-- shared/                   # KPI, charts, anomaly, reporting logic
+`-- requirements.txt          # Runtime dependencies
 ```
 
-## 技术栈
-
-| 类别 | 工具与能力 |
-| --- | --- |
-| 商业分析 | Business Analysis、KPI Design、Root Cause Analysis、Dashboard、经营异常诊断 |
-| 数据分析 | SQL、Python、Pandas、NumPy、Excel、DuckDB、数据清洗与指标分析 |
-| 开发 | Streamlit、Plotly、python-docx、Git、GitHub |
-| AI 辅助 | ChatGPT、Claude、Gemini、Codex、OpenCode |
-
-## 本地运行
+## How To Run Locally
 
 ```bash
 python -m pip install -r requirements.txt
+streamlit run app.py
+```
 
+Independent module entrances:
+
+```bash
 streamlit run dashboard/app.py
 streamlit run anomaly_detection/app.py
 streamlit run weekly_report/app.py
 ```
 
-## 项目截图
+## Target Roles
 
-### Dashboard
+- Business Analyst
+- Operations Analyst
+- Data Analyst
+- BI Analyst
+- Merchant Analyst
+- Product Analyst
+- Data Product Analyst
+- AI Product Analyst
 
-![Dashboard 预览](assets/screenshots/dashboard.png)
+## Evidence Boundary
 
-### 异常诊断
+This project is based on public anonymized e-commerce data. The analysis can support business diagnosis and investigation prioritization, but it does not claim to prove real enterprise operating results.
 
-![异常诊断预览](assets/screenshots/anomaly_detection.png)
+Public transaction data cannot directly prove inventory, traffic, exposure, promotion, competitor pricing, or supply-chain mechanisms. If real enterprise data were available, the next step would be to add these fields for validation and monitoring.
 
-### 经营周报
+## Contact
 
-![经营周报预览](assets/screenshots/weekly_report.png)
-
-## 适用岗位
-
-商业分析、经营分析、数据分析、BI、商家分析、产品分析、数据产品、AI 产品。
-
-## 说明
-
-本项目基于公开匿名数据，用于展示商业分析、经营分析和数据产品相关能力。项目中的分析结论不代表真实企业经营结论，也不用于说明实际业务效果。
-
-## 联系方式
-
-- GitHub：待补充
-- 邮箱：13080622230@163.com
+- GitHub: [huaxu0907-spec](https://github.com/huaxu0907-spec)
+- Email: 3080622230@163.com

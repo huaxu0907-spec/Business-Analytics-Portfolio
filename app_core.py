@@ -144,7 +144,7 @@ def render_home(metadata: dict) -> None:
             st.write(description)
             st.button(
                 "进入模块",
-                key=f"portfolio_button_{number}",
+                key=f"home_{number}",
                 width="stretch",
                 on_click=navigate_to,
                 args=(target,),
@@ -214,11 +214,7 @@ def render_about() -> None:
 
 
 def navigate_to(target: str) -> None:
-    st.session_state["navigation"] = target
-
-
-def sync_navigation(widget_key: str) -> None:
-    st.session_state["navigation"] = st.session_state[widget_key]
+    st.session_state["requested_navigation"] = target
 
 
 def render_anomaly_detection(fact: pd.DataFrame, metadata: dict) -> None:
@@ -630,18 +626,17 @@ fact, metadata = get_data()
 st.session_state.setdefault("bi_view", "经营总览")
 st.session_state.setdefault("diag_seller", DEFAULT_SELLER)
 st.session_state.setdefault("diag_selector", DEFAULT_SELLER)
-st.session_state.setdefault("navigation", "首页")
+st.session_state.setdefault("portfolio_navigation", "首页")
+
+if "requested_navigation" in st.session_state:
+    st.session_state["portfolio_navigation"] = st.session_state.pop("requested_navigation")
 
 app_mode = os.getenv("STREAMLIT_APP_MODE")
 navigation_options = ["首页", "经营分析 Dashboard", "商家异常诊断", "自动经营周报", "分析思路", "项目说明", "关于作者"]
-navigation_key = f"portfolio_navigation_widget_{st.session_state['navigation']}"
 navigation = app_mode or st.sidebar.radio(
     "作品集导航",
     navigation_options,
-    index=navigation_options.index(st.session_state["navigation"]),
-    key=navigation_key,
-    on_change=sync_navigation,
-    args=(navigation_key,),
+    key="portfolio_navigation",
 )
 st.sidebar.caption("独立部署模式" if app_mode else "统一作品集入口")
 

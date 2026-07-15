@@ -142,9 +142,13 @@ def render_home(metadata: dict) -> None:
             st.caption(number)
             st.subheader(title)
             st.write(description)
-            if st.button("进入模块", key=f"home_{number}", width="stretch"):
-                st.session_state["portfolio_navigation"] = target
-                st.rerun()
+            st.button(
+                "进入模块",
+                key=f"portfolio_button_{number}",
+                width="stretch",
+                on_click=navigate_to,
+                args=(target,),
+            )
 
     st.subheader("数据范围")
     cards = st.columns(4)
@@ -207,6 +211,14 @@ def render_about() -> None:
         "Gitee：待补充  \\n"
         "邮箱：待补充"
     )
+
+
+def navigate_to(target: str) -> None:
+    st.session_state["navigation"] = target
+
+
+def sync_navigation(widget_key: str) -> None:
+    st.session_state["navigation"] = st.session_state[widget_key]
 
 
 def render_anomaly_detection(fact: pd.DataFrame, metadata: dict) -> None:
@@ -618,13 +630,18 @@ fact, metadata = get_data()
 st.session_state.setdefault("bi_view", "经营总览")
 st.session_state.setdefault("diag_seller", DEFAULT_SELLER)
 st.session_state.setdefault("diag_selector", DEFAULT_SELLER)
+st.session_state.setdefault("navigation", "首页")
 
 app_mode = os.getenv("STREAMLIT_APP_MODE")
+navigation_options = ["首页", "经营分析 Dashboard", "商家异常诊断", "自动经营周报", "分析思路", "项目说明", "关于作者"]
+navigation_key = f"portfolio_navigation_widget_{st.session_state['navigation']}"
 navigation = app_mode or st.sidebar.radio(
     "作品集导航",
-    ["首页", "经营分析 Dashboard", "商家异常诊断", "自动经营周报", "分析思路", "项目说明", "关于作者"],
-    index=0,
-    key="portfolio_navigation",
+    navigation_options,
+    index=navigation_options.index(st.session_state["navigation"]),
+    key=navigation_key,
+    on_change=sync_navigation,
+    args=(navigation_key,),
 )
 st.sidebar.caption("独立部署模式" if app_mode else "统一作品集入口")
 

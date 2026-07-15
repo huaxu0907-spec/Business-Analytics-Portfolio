@@ -146,7 +146,7 @@ def render_home(metadata: dict) -> None:
                 "进入模块",
                 key=f"home_{number}",
                 width="stretch",
-                on_click=navigate_to,
+                on_click=request_navigation,
                 args=(target,),
             )
 
@@ -213,7 +213,7 @@ def render_about() -> None:
     )
 
 
-def navigate_to(target: str) -> None:
+def request_navigation(target: str) -> None:
     st.session_state["requested_navigation"] = target
 
 

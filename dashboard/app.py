@@ -5,6 +5,6 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-os.environ["STREAMLIT_APP_MODE"] = "BI经营看板"
+os.environ["STREAMLIT_APP_MODE"] = "经营分析 Dashboard"
 
 import app_core  # noqa: E402,F401

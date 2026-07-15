@@ -121,20 +121,30 @@ def chart_card(question: str, figure) -> None:
 
 
 def render_home(metadata: dict) -> None:
-    module_header("电商经营分析中心", "以统一口径串联经营总览、异常识别、商家诊断、行动建议与验证指标。", ":material/analytics:", "产品首页", "blue")
-    st.subheader("应用模块")
+    module_header("商业分析作品集", "围绕重点商家经营异常诊断，展示从经营分析到可视化、自动周报与标准化交付物的完整实践。", ":material/analytics:", "Business Analytics Portfolio", "blue")
+    st.subheader("核心业务问题")
+    st.markdown(
+        "- GMV 是否出现异常下降，是否属于平台整体趋势？\n"
+        "- 订单量、客单价与 SKU 结构中，哪些指标更值得优先关注？\n"
+        "- 哪些高贡献未成交 SKU 需要优先核查？\n"
+        "- 如何将一次诊断沉淀为持续监控与经营周报？"
+    )
+
+    st.subheader("三个交互模块")
     columns = st.columns(3, border=True)
     module_info = [
-        ("01", "BI经营看板", "经营总览与商家诊断", "已开放", "green"),
-        ("02", "异常识别", "处理等级、可观测证据与优先核查方向", "已开放", "green"),
-        ("03", "自动经营周报", "页面预览与Word下载", "已开放", "green"),
+        ("01", "经营分析 Dashboard", "查看 GMV、订单、客单价与商家诊断。", "经营分析 Dashboard"),
+        ("02", "商家异常诊断", "查看处理等级、可观测证据与优先核查方向。", "商家异常诊断"),
+        ("03", "自动经营周报", "预览并导出标准化经营周报。", "自动经营周报"),
     ]
-    for column, (number, title, description, status, color) in zip(columns, module_info):
+    for column, (number, title, description, target) in zip(columns, module_info):
         with column:
             st.caption(number)
             st.subheader(title)
             st.write(description)
-            st.badge(status, color=color)
+            if st.button("进入模块", key=f"home_{number}", width="stretch"):
+                st.session_state["portfolio_navigation"] = target
+                st.rerun()
 
     st.subheader("数据范围")
     cards = st.columns(4)
@@ -142,7 +152,61 @@ def render_home(metadata: dict) -> None:
     cards[1].metric("活跃商家", f"{metadata['sellers']:,}", border=True)
     cards[2].metric("数据起始", metadata["start_date"], border=True)
     cards[3].metric("数据截止", metadata["end_date"], border=True)
-    st.caption("公开Olist数据｜仅保留已交付订单｜金额单位BRL｜不将公开数据结论表述为真实企业成果")
+    st.caption("公开 Olist 数据｜仅保留已交付订单｜金额单位 BRL｜不将公开数据结论表述为真实企业成果")
+    st.subheader("项目交付物与源码")
+    st.markdown(
+        "- GitHub 源码链接：待补充\n"
+        "- Gitee 源码链接：待补充\n"
+        "- Executive Summary：仓库 `executive/` 目录\n"
+        "- Resume：仓库 `resume/` 目录"
+    )
+    st.info(
+        "证据边界：公开成交数据可用于识别经营变化与核查方向，但不能直接证明库存、曝光、流量、竞品价格或供应链机制；高贡献未成交 SKU 仅是优先核查对象。",
+        icon=":material/warning:",
+    )
+
+
+def render_analysis_approach() -> None:
+    module_header("分析思路", "将经营问题转化为可验证的指标、诊断与监控流程。", ":material/account_tree:", "Analysis Framework", "blue")
+    st.subheader("商业分析流程")
+    st.markdown(
+        "业务背景\n\n↓\n\n业务问题\n\n↓\n\nKPI 指标设计\n\n↓\n\nSQL 数据提取\n\n↓\n\nPython 数据分析\n\n↓\n\n异常诊断\n\n↓\n\n业务洞察\n\n↓\n\n治理建议\n\n↓\n\n验证与监控"
+    )
+    st.subheader("分析判断逻辑")
+    st.markdown(
+        "- **先确认异常**：将重点商家与平台整体、主营品类的变化进行对比，避免把整体波动误判为单个商家问题。\n"
+        "- **拆解 GMV**：GMV 由订单量与客单价共同构成，先拆分能够识别规模变化与价格/组合变化的不同方向。\n"
+        "- **继续分析 SKU**：订单变化需要落到商品结构，才能定位高贡献商品的成交变化是否值得进一步核查。\n"
+        "- **优先核查高贡献未成交 SKU**：它们对经营表现的潜在影响更大，但仅代表核查优先级，不直接证明缺货或供给收缩。"
+    )
+    st.subheader("证据边界与下一步")
+    st.markdown(
+        "公开数据不能证明库存、曝光、流量、竞品价格、促销触达或供应链等具体机制。若拥有真实企业数据，下一步应补充库存与可售状态、流量与曝光、商品价格与促销、营销触达、履约、供应商及商家运营记录等字段，用于验证假设并建立持续监控。"
+    )
+
+
+def render_project_notes() -> None:
+    module_header("项目说明", "本作品集展示分析流程、可交互界面与标准化交付物，不扩展公开数据能够支持的结论。", ":material/folder_open:", "Project Notes", "blue")
+    st.subheader("项目模块")
+    st.markdown(
+        "- **经营分析 Dashboard**：统一展示经营总览、指标趋势与商家诊断。\n"
+        "- **商家异常诊断**：形成处理等级、可观测证据、核查方向与建议动作。\n"
+        "- **自动经营周报**：将分析口径沉淀为页面预览与 Word 周报。"
+    )
+    st.subheader("仓库交付物")
+    st.markdown(
+        "分析报告、SQL Scripts 与 Notebook 位于 `analysis/`；Executive Summary 位于 `executive/`；Business Resume 与 Product Resume 位于 `resume/`。"
+    )
+
+
+def render_about() -> None:
+    module_header("关于作者", "面向商业分析、经营分析、数据分析、产品分析与 AI 产品相关岗位的作品集。", ":material/person:", "About", "blue")
+    st.markdown(
+        "本项目基于公开匿名数据构建，用于展示商业分析与数据产品实践能力。分析结论不代表真实企业经营结论。\n\n"
+        "GitHub：待补充  \\n"
+        "Gitee：待补充  \\n"
+        "邮箱：待补充"
+    )
 
 
 def render_anomaly_detection(fact: pd.DataFrame, metadata: dict) -> None:
@@ -557,15 +621,18 @@ st.session_state.setdefault("diag_selector", DEFAULT_SELLER)
 
 app_mode = os.getenv("STREAMLIT_APP_MODE")
 navigation = app_mode or st.sidebar.radio(
-    "应用导航", ["项目首页", "BI经营看板", "异常识别", "自动经营周报"], index=1
+    "作品集导航",
+    ["首页", "经营分析 Dashboard", "商家异常诊断", "自动经营周报", "分析思路", "项目说明", "关于作者"],
+    index=0,
+    key="portfolio_navigation",
 )
-st.sidebar.caption("独立部署模式" if app_mode else "三个程序均已开放")
+st.sidebar.caption("独立部署模式" if app_mode else "统一作品集入口")
 
-if navigation == "项目首页":
+if navigation == "首页":
     render_home(metadata)
     st.stop()
 
-if navigation == "异常识别":
+if navigation == "商家异常诊断":
     render_anomaly_detection(fact, metadata)
     st.stop()
 
@@ -573,7 +640,19 @@ if navigation == "自动经营周报":
     render_weekly_report(fact, metadata)
     st.stop()
 
-module_header("BI经营看板", "从经营总览识别关注指标，再进入商家诊断形成优先核查方向、行动建议和验证指标。", ":material/monitoring:", "程序1｜经营监控", "blue")
+if navigation == "分析思路":
+    render_analysis_approach()
+    st.stop()
+
+if navigation == "项目说明":
+    render_project_notes()
+    st.stop()
+
+if navigation == "关于作者":
+    render_about()
+    st.stop()
+
+module_header("经营分析 Dashboard", "从经营总览识别关注指标，再进入商家诊断形成优先核查方向、行动建议和验证指标。", ":material/monitoring:", "程序1｜经营监控", "blue")
 
 minimum_date = pd.Timestamp(metadata["start_date"]).date()
 maximum_date = pd.Timestamp(metadata["end_date"]).date()

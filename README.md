@@ -24,11 +24,17 @@ This project uses public anonymized e-commerce transaction data to build a reusa
 
 The online app includes the full portfolio entrance and the three interactive modules below.
 
+## Portfolio Screenshot
+
+![Portfolio Home Screenshot](assets/home.png)
+
 ## Core Projects
 
 ### 1. Business Analytics Dashboard
 
-![Dashboard Screenshot](assets/screenshots/dashboard.png)
+**Screenshot**
+
+![Dashboard Screenshot](assets/dashboard.png)
 
 **Business Background**  
 Business teams need a fast way to monitor GMV, order volume, AOV, active merchants, seller contribution, category contribution, and merchant-level performance changes.
@@ -53,7 +59,9 @@ SQL, Python, Pandas, Streamlit, Plotly
 
 ### 2. Business Anomaly Detection
 
-![Anomaly Detection Screenshot](assets/screenshots/anomaly_detection.png)
+**Screenshot**
+
+![Anomaly Detection Screenshot](assets/anomaly_detection.png)
 
 **Business Background**  
 When multiple merchants operate on the same platform, business teams need a structured way to identify abnormal performance changes and prioritize follow-up actions.
@@ -78,7 +86,9 @@ SQL, Python, Pandas, Streamlit, Business Rules
 
 ### 3. Automated Weekly Business Report
 
-![Weekly Report Screenshot](assets/screenshots/weekly_report.png)
+**Screenshot**
+
+![Weekly Report Screenshot](assets/weekly_report.png)
 
 **Business Background**  
 Business teams often need recurring weekly updates for management review, including performance changes, risk signals, and next-step actions.
@@ -162,7 +172,7 @@ Business-Analytics-Portfolio/
 |-- analysis/                 # SQL, Notebook, figures, and analysis deliverables
 |-- executive/                # Executive Summary documents
 |-- resume/                   # Resume documents
-|-- assets/screenshots/       # Project screenshots
+|-- assets/                   # Portfolio and project screenshots
 |-- data/                     # Prepared public anonymized data
 |-- shared/                   # KPI, charts, anomaly, reporting logic
 `-- requirements.txt          # Runtime dependencies

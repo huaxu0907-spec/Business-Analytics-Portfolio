@@ -18,11 +18,21 @@ This project uses public anonymized e-commerce transaction data to build a reusa
 - Which merchants or SKUs should be prioritized for follow-up investigation?
 - How can the analysis be converted into ongoing monitoring and weekly reporting?
 
-## Live Portfolio Demo
+## Live Demo
 
-[Open Streamlit Portfolio](https://huaxu0907-spec-business-analytics-portfolio-app-9hxbax.streamlit.app)
+Portfolio:  
+[Streamlit Portfolio](https://huaxu0907-spec-business-analytics-portfolio-app-9hxbax.streamlit.app)
 
-The online app includes the full portfolio entrance and the three interactive modules below.
+Dashboard:  
+[Business Analytics Dashboard](https://huaxu0907-spec-business-analytics-portfolio-app-9hxbax.streamlit.app)
+
+Anomaly Detection:  
+[Business Anomaly Detection](https://huaxu0907-spec-business-analytics-portfolio-app-9hxbax.streamlit.app)
+
+Weekly Report:  
+[Automated Weekly Business Report](https://huaxu0907-spec-business-analytics-portfolio-app-9hxbax.streamlit.app)
+
+The online portfolio uses one unified Streamlit entrance. The Dashboard, Anomaly Detection, and Weekly Report modules can be accessed from the sidebar navigation.
 
 ## Portfolio Screenshot
 
